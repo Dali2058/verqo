@@ -4,6 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Crocodora Creative Studio — Services</title>
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Crocodora Creative Studio">
+<meta property="og:url" content="https://crocodorastudio.com/services">
+<meta property="og:title" content="Services — Crocodora Creative Studio">
+<meta property="og:description" content="Branding, art direction, gaming design, social & ad creative, product design and motion — all under one studio.">
+<meta property="og:image" content="https://i.postimg.cc/25Bp1rnj/image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Services — Crocodora Creative Studio">
+<meta name="twitter:description" content="Branding, art direction, gaming design, social & ad creative, product design and motion — all under one studio.">
+<meta name="twitter:image" content="https://i.postimg.cc/25Bp1rnj/image.png">
 <link rel="icon" href="https://i.postimg.cc/L4w8Y133/Asset-114x.png">
 <style>
 /* ============================================
@@ -163,38 +177,38 @@ a{ color: inherit; text-decoration: none; }
 
 .marquee-wrap{
   position: absolute;
-  inset: -8% -6%;
-  display: flex;
-  gap: 3px;
-  transform: rotate(-3.5deg) scale(1.08);
-}
-
-.marquee-col{
-  flex: 1 1 0;
+  inset: -12% -10%;
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  min-width: 0;
+  gap: 20px;
+  transform: rotate(-4deg) scale(1.14);
+}
+
+.marquee-row{
+  display: flex;
+  gap: 20px;
+  width: max-content;
   will-change: transform;
 }
-.marquee-col img{
-  width: 100%;
-  height: 260px;
+.marquee-row img{
+  width: 380px;
+  height: 250px;
   object-fit: cover;
-  filter: saturate(.85) brightness(.72);
+  border-radius: 20px;
+  filter: saturate(.9) brightness(.8);
   flex: 0 0 auto;
 }
 
-@keyframes scrollUp{
-  from{ transform: translateY(0); }
-  to{ transform: translateY(-50%); }
+@keyframes scrollLeft{
+  from{ transform: translateX(0); }
+  to{ transform: translateX(-50%); }
 }
-@keyframes scrollDown{
-  from{ transform: translateY(-50%); }
-  to{ transform: translateY(0); }
+@keyframes scrollRight{
+  from{ transform: translateX(-50%); }
+  to{ transform: translateX(0); }
 }
-.marquee-col.up   { animation: scrollUp linear infinite; }
-.marquee-col.down { animation: scrollDown linear infinite; }
+.marquee-row.left  { animation: scrollLeft linear infinite; }
+.marquee-row.right { animation: scrollRight linear infinite; }
 
 .hero-overlay{
   position: absolute;
@@ -280,7 +294,7 @@ a{ color: inherit; text-decoration: none; }
 }
 
 @media (max-width: 720px){
-  .marquee-col img{ height: 170px; }
+  .marquee-row img{ width: 220px; height: 150px; border-radius: 14px; }
   .hero-content{ padding: 0 6vw 12vh; }
   .scroll-hint{ display:none; }
 }
@@ -499,7 +513,7 @@ footer{
 }
 
 @media (prefers-reduced-motion: reduce){
-  .marquee-col, .glass-nav::before{ animation: none !important; }
+  .marquee-row, .glass-nav::before{ animation: none !important; }
 }
 
 </style>
@@ -584,7 +598,7 @@ const WORK_IMAGES = [
 ];
 
 const NAV_LINKS = [
-  { label: "Home",     href: "/home",     match: "home" },
+  { label: "Home",     href: "/",     match: "home" },
   { label: "Services", href: "/services", match: "services" },
   { label: "Works",    href: "/works",    match: "works" },
   { label: "Contact",  href: "/contact",  match: "contact" }
@@ -600,7 +614,7 @@ function renderHeader(){
   ).join("");
 
   mount.innerHTML = `
-    <a href="/home" class="logo"><img src="${SITE_LOGO}" alt="Crocodora Creative Studio"></a>
+    <a href="/" class="logo"><img src="${SITE_LOGO}" alt="Crocodora Creative Studio"></a>
     <nav class="glass-nav">${links}</nav>
   `;
 }
@@ -610,9 +624,9 @@ function renderFooter(){
   if(!mount) return;
   mount.innerHTML = `
     <div class="container footer-row">
-      <a href="/home" class="logo"><img src="${SITE_LOGO}" alt="Crocodora Creative Studio"></a>
+      <a href="/" class="logo"><img src="${SITE_LOGO}" alt="Crocodora Creative Studio"></a>
       <div class="footer-links">
-        <a href="/home">Home</a>
+        <a href="/">Home</a>
         <a href="/services">Services</a>
         <a href="/works">Works</a>
         <a href="/contact">Contact</a>
@@ -622,31 +636,36 @@ function renderFooter(){
   `;
 }
 
-/* 8-column marquee hero — each column carries a single design,
-   repeated twice for a seamless loop. Neighbouring columns run at
-   different speeds / directions so nothing moves in sync. */
+/* Tilted grid marquee hero — rows of large image tiles, each row
+   scrolling horizontally in a different direction/speed so nothing
+   moves in sync. Each row is duplicated once for a seamless loop. */
 function renderMarquee(){
   const wrap = document.getElementById("marquee-wrap");
   if(!wrap) return;
 
-  const durations = [26, 34, 22, 38, 28, 32, 24, 36];
+  const rows = [
+    { dir: "left",  duration: 42, images: [0, 1, 2, 3, 4] },
+    { dir: "right", duration: 52, images: [5, 6, 7, 0, 1] },
+    { dir: "left",  duration: 46, images: [2, 3, 4, 5, 6] },
+    { dir: "right", duration: 58, images: [7, 0, 1, 2, 3] }
+  ];
 
-  WORK_IMAGES.forEach((src, i) => {
-    const col = document.createElement("div");
-    const dir = i % 2 === 0 ? "up" : "down";
-    col.className = `marquee-col ${dir}`;
-    col.style.animationDuration = durations[i % durations.length] + "s";
+  rows.forEach(row => {
+    const rowEl = document.createElement("div");
+    rowEl.className = `marquee-row ${row.dir}`;
+    rowEl.style.animationDuration = row.duration + "s";
 
-    // duplicate the single image several times so the column always
-    // fills the viewport height and the loop has no visible seam
-    for(let copy = 0; copy < 8; copy++){
-      const img = document.createElement("img");
-      img.src = src;
-      img.alt = "";
-      img.loading = copy < 2 ? "eager" : "lazy";
-      col.appendChild(img);
+    // duplicate the tile set twice so translateX(-50%) loops seamlessly
+    for(let copy = 0; copy < 2; copy++){
+      row.images.forEach((idx, i) => {
+        const img = document.createElement("img");
+        img.src = WORK_IMAGES[idx];
+        img.alt = "";
+        img.loading = (copy === 0 && i < 3) ? "eager" : "lazy";
+        rowEl.appendChild(img);
+      });
     }
-    wrap.appendChild(col);
+    wrap.appendChild(rowEl);
   });
 }
 
