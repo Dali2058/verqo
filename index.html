@@ -1,137 +1,1052 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة الثعبان</title>
-    <style>
-        body {
-            background-color: #1a1a1a;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            color: #4CAF50;
-            margin-bottom: 5px;
-            font-size: 28px;
-        }
-        #score {
-            font-size: 22px;
-            margin-bottom: 15px;
-            color: #ffeb3b;
-        }
-        canvas {
-            background-color: #111;
-            border: 3px solid #4CAF50;
-            box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
-            display: block;
-            margin: 0 auto;
-            border-radius: 8px;
-        }
-        .instructions {
-            margin-top: 15px;
-            color: #aaa;
-            font-size: 14px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VERQO — Branding, Art Direction & Gaming Design</title>
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VERQO">
+<meta property="og:url" content="https://verqo.com/">
+<meta property="og:title" content="VERQO — We Build Brands That Stand Out">
+<meta property="og:description" content="Branding, art direction and gaming design for brands and communities that want to lead the scene.">
+<meta property="og:image" content="https://i.postimg.cc/25Bp1rnj/image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="VERQO — We Build Brands That Stand Out">
+<meta name="twitter:description" content="Branding, art direction and gaming design for brands and communities that want to lead the scene.">
+<meta name="twitter:image" content="https://i.postimg.cc/25Bp1rnj/image.png">
+<link rel="icon" type="image/png" href="https://i.postimg.cc/rF9G6PYk/verqo-favicon.png">
+<link rel="shortcut icon" type="image/png" href="https://i.postimg.cc/rF9G6PYk/verqo-favicon.png">
+<link rel="apple-touch-icon" href="https://i.postimg.cc/rF9G6PYk/verqo-favicon.png">
+<style>
+/* ============================================
+   VERQO — shared stylesheet
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root{
+  --bg: #08080a;
+  --bg-soft: #0f0f12;
+  --ink: #f4f4f6;
+  --ink-dim: #9a9aa4;
+  --line: rgba(255,255,255,.09);
+
+  --glass-bg: rgba(255,255,255,.06);
+  --glass-bg-strong: rgba(255,255,255,.12);
+  --glass-border: rgba(255,255,255,.28);
+  --glass-highlight: rgba(255,255,255,.55);
+
+  --chrome-1: #e9eaee;
+  --chrome-2: #9a9ca4;
+  --chrome-3: #4a4c52;
+
+  --radius-lg: 22px;
+  --radius-md: 14px;
+  --radius-sm: 8px;
+
+  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+body{
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+img{ max-width: 100%; display:block; }
+a{ color: inherit; text-decoration: none; }
+
+::selection{ background: var(--chrome-1); color:#000; }
+
+.container{
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 6vw;
+}
+
+/* ---------------------------------
+   Liquid-glass navigation
+--------------------------------- */
+.site-header{
+  position: fixed;
+  top: 22px;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6vw;
+  pointer-events: none;
+}
+
+.logo{
+  pointer-events: all;
+  display: flex;
+  align-items: center;
+}
+.logo img{
+  height: 34px;
+  width: auto;
+}
+
+.glass-nav{
+  pointer-events: all;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 999px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.35),
+    inset 0 -1px 8px rgba(255,255,255,.06),
+    0 10px 30px rgba(0,0,0,.35);
+  overflow: hidden;
+}
+.glass-nav::before{
+  content:"";
+  position: absolute;
+  top: -50%;
+  left: -20%;
+  width: 60%;
+  height: 200%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.18) 45%, transparent 60%);
+  transform: rotate(8deg);
+  animation: glassSweep 7s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes glassSweep{
+  0%   { left: -40%; }
+  50%  { left: 110%; }
+  100% { left: 110%; }
+}
+
+.glass-nav a{
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-dim);
+  padding: 10px 20px;
+  border-radius: 999px;
+  transition: color .25s ease, background .25s ease;
+  white-space: nowrap;
+}
+.glass-nav a:hover{
+  color: var(--ink);
+}
+.glass-nav a.active{
+  color: #0a0a0c;
+  background: var(--ink);
+}
+
+@media (max-width: 720px){
+  .site-header{ top: 16px; padding: 0 5vw; }
+  .logo img{ height: 26px; }
+  .glass-nav a{ padding: 9px 13px; font-size: 12.5px; }
+}
+
+/* ---------------------------------
+   Hero — 8 column marquee
+--------------------------------- */
+.hero{
+  position: relative;
+  height: 100vh;
+  min-height: 640px;
+  width: 100%;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.marquee-wrap{
+  position: absolute;
+  inset: -12% -10%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transform: rotate(-4deg) scale(1.14);
+}
+
+.marquee-row{
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  will-change: transform;
+}
+.marquee-row img{
+  width: 380px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 20px;
+  filter: saturate(.9) brightness(.8);
+  flex: 0 0 auto;
+}
+
+@keyframes scrollLeft{
+  from{ transform: translateX(0); }
+  to{ transform: translateX(-50%); }
+}
+@keyframes scrollRight{
+  from{ transform: translateX(-50%); }
+  to{ transform: translateX(0); }
+}
+.marquee-row.left  { animation: scrollLeft linear infinite; }
+.marquee-row.right { animation: scrollRight linear infinite; }
+
+.hero-overlay{
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(0deg, rgba(8,8,10,.92) 0%, rgba(8,8,10,.55) 38%, rgba(8,8,10,.72) 100%);
+  z-index: 2;
+}
+
+.hero-content{
+  position: relative;
+  z-index: 3;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 6vw 9vh;
+}
+
+.hero-eyebrow{
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-dim);
+  margin-bottom: 20px;
+  letter-spacing: .2px;
+}
+
+.hero-title{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(40px, 6.4vw, 92px);
+  line-height: .98;
+  margin: 0 0 34px;
+  max-width: 16ch;
+  color: var(--ink);
+}
+
+.hero-tagline{
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--ink-dim);
+  margin-bottom: 30px;
+}
+
+.hero-cta{
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.btn{
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 15px 28px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: transform .2s ease, background .2s ease, opacity .2s ease, box-shadow .2s ease;
+}
+.btn:hover{ transform: translateY(-2px); }
+.btn-primary{
+  background: var(--ink);
+  color: #0a0a0c;
+  box-shadow: 0 4px 20px rgba(255,255,255,.15);
+}
+.btn-primary:hover{ opacity: .88; box-shadow: 0 6px 24px rgba(255,255,255,.25); }
+.btn-ghost{
+  background: rgba(255,255,255,.08);
+  color: var(--ink);
+  border: 1px solid rgba(255,255,255,.22);
+  backdrop-filter: blur(10px);
+}
+.btn-ghost:hover{ background: rgba(255,255,255,.14); }
+
+.scroll-hint{
+  position: absolute;
+  right: 6vw;
+  bottom: 4vh;
+  z-index: 3;
+  font-size: 12px;
+  color: var(--ink-dim);
+  letter-spacing: .3px;
+}
+
+@media (max-width: 720px){
+  .marquee-row img{ width: 220px; height: 150px; border-radius: 14px; }
+  .hero-content{ padding: 0 6vw 12vh; }
+  .scroll-hint{ display:none; }
+}
+
+/* ---------------------------------
+   Generic page sections
+--------------------------------- */
+section{ padding: 90px 0; }
+section.tight{ padding: 60px 0; }
+
+.section-head{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 30px;
+  margin-bottom: 46px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 26px;
+}
+.section-head h2{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(24px, 3vw, 34px);
+  margin: 0;
+}
+.section-head span{
+  color: var(--ink-dim);
+  font-size: 14px;
+  max-width: 40ch;
+}
+
+/* work / portfolio grid */
+.work-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+.work-card{
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+}
+.work-card img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s ease;
+}
+.work-card:hover img{ transform: scale(1.05); }
+.work-card .tag{
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(8,8,10,.55);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.18);
+}
+
+@media (max-width: 720px){
+  .work-grid{ grid-template-columns: 1fr; }
+}
+
+/* contact */
+.contact-grid{
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 60px;
+}
+.contact-info h3{
+  font-family: var(--font-display);
+  font-size: 18px;
+  margin: 0 0 10px;
+}
+.contact-info p{
+  color: var(--ink-dim);
+  font-size: 14.5px;
+  line-height: 1.7;
+  margin: 0 0 30px;
+}
+.contact-list{ list-style:none; padding:0; margin:0; }
+.contact-list li{
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+  display:flex;
+  justify-content: space-between;
+  font-size: 14.5px;
+}
+.contact-list li:last-child{ border-bottom: 1px solid var(--line); }
+.contact-list span{ color: var(--ink-dim); }
+
+.field{
+  margin-bottom: 18px;
+}
+.field label{
+  display:block;
+  font-size: 12.5px;
+  color: var(--ink-dim);
+  margin-bottom: 8px;
+}
+.field input,
+.field textarea{
+  width: 100%;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 13px 15px;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  resize: vertical;
+}
+.field input:focus,
+.field textarea:focus{
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+
+@media (max-width: 800px){
+  .contact-grid{ grid-template-columns: 1fr; }
+}
+
+/* footer */
+footer{
+  border-top: 1px solid var(--line);
+  padding: 40px 0;
+}
+.footer-row{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.footer-row .logo img{ height: 24px; }
+.footer-links{
+  display:flex;
+  gap: 26px;
+}
+.footer-links a{
+  font-size: 13px;
+  color: var(--ink-dim);
+}
+.footer-links a:hover{ color: var(--ink); }
+.footer-note{
+  font-size: 12.5px;
+  color: var(--ink-dim);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .marquee-row, .glass-nav::before{ animation: none !important; }
+}
+
+/* single-page scroll targets */
+section[id]{
+  scroll-margin-top: 100px;
+}
+.intro{
+  max-width: 60ch;
+  margin-bottom: 46px;
+}
+.intro .eyebrow{
+  font-size: 13px;
+  color: var(--ink-dim);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.intro h2{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(30px, 4.2vw, 46px);
+  line-height: 1.05;
+  margin: 0 0 16px;
+}
+.intro p{
+  font-size: 15px;
+  color: var(--ink-dim);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---------------------------------
+   Services Grid & Interactive Dropdown Lists
+--------------------------------- */
+.services-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.service-card{
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: var(--bg-soft);
+  cursor: pointer;
+  border: 1px solid var(--line);
+  transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+.service-card:hover{
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,.3);
+  box-shadow: 0 12px 35px rgba(0,0,0,.5);
+}
+.service-card.active{
+  border-color: var(--ink);
+  box-shadow: 0 0 25px rgba(255,255,255,.15);
+}
+.service-card img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s ease, filter .3s ease;
+}
+.service-card:hover img{
+  transform: scale(1.06);
+  filter: brightness(.85);
+}
+.service-card .service-overlay{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8,8,10,0) 45%, rgba(8,8,10,.88) 100%);
+}
+.service-card .service-label{
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.service-card .service-hint{
+  position: absolute;
+  right: 20px;
+  bottom: 21px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-dim);
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(8,8,10,.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.18);
+  transition: background .2s ease, color .2s ease;
+}
+.service-card.active .service-hint{
+  background: var(--ink);
+  color: #0a0a0c;
+  border-color: var(--ink);
+}
+
+@media (max-width: 900px){
+  .services-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px){
+  .services-grid{ grid-template-columns: 1fr; }
+}
+
+/* Expanded Dropdown Drawer */
+.service-dropdown-drawer {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, margin 0.4s ease;
+  background: var(--bg-soft);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  margin-top: 0;
+}
+.service-dropdown-drawer.open {
+  max-height: 2500px;
+  opacity: 1;
+  border-color: var(--line);
+  margin-top: 24px;
+  padding: 40px 34px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.6);
+  animation: fadeInDrawer 0.5s ease forwards;
+}
+@keyframes fadeInDrawer {
+  from { transform: translateY(-10px); }
+  to { transform: translateY(0); }
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.drawer-header h3 {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 28px);
+  margin: 0;
+  color: var(--ink);
+}
+.drawer-close {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.22);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+.drawer-close:hover {
+  background: rgba(255,255,255,.16);
+}
+
+.drawer-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 26px;
+}
+
+.drawer-item {
+  background: rgba(255,255,255,.02);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: transform .3s ease, border-color .3s ease;
+}
+.drawer-item:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255,255,255,.25);
+}
+
+.drawer-item img {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  object-fit: cover;
+}
+
+.order-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #0a0a0c;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  transition: opacity .2s ease, transform .2s ease, box-shadow .2s ease;
+  box-shadow: 0 4px 15px rgba(255,255,255,.15);
+}
+.order-btn:hover {
+  opacity: .9;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255,255,255,.25);
+}
+</style>
 </head>
-<body>
+<body data-page="home">
 
-    <h1>خليهولك يعملك الموقع بقى</h1>
-    <div id="score">النقاط: 0</div>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <div class="instructions">استخدم أزرار الأسهم في لوحة المفاتيح للتحكم بالثعبان</div>
+<header id="site-header" class="site-header"></header>
 
-    <script>
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
+<section id="home" class="hero">
+  <div class="marquee-wrap" id="marquee-wrap"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">VERQO // 2026 EDITION</div>
+    <h1 class="hero-title">We build brands that stand out.</h1>
+    <div class="hero-tagline">Branding · Art Direction · Gaming Design</div>
+    <div class="hero-cta">
+      <a href="#services" class="btn btn-primary">Our Services</a>
+      <a href="#works" class="btn btn-ghost">Explore Work</a>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll down to explore</div>
+</section>
 
-        const box = 20;
-        let snake = [];
-        snake[0] = { x: 9 * box, y: 10 * box };
+<section id="services">
+  <div class="container">
+    <div class="intro">
+      <div class="eyebrow">SERVICES</div>
+      <h2>Service categories &amp; price lists.</h2>
+      <p>Explore our categories below, click any service to view detailed pricing directly, and order instantly on Discord.</p>
+    </div>
+    <div class="services-grid" id="services-grid"></div>
+    <div class="service-dropdown-drawer" id="service-dropdown-drawer">
+      <div class="drawer-header">
+        <h3 id="drawer-title"></h3>
+        <button type="button" class="drawer-close" id="drawer-close">&larr; Close price list</button>
+      </div>
+      <div class="drawer-items-grid" id="drawer-items-grid"></div>
+    </div>
+  </div>
+</section>
 
-        let food = {
-            x: Math.floor(Math.random() * 19) * box,
-            y: Math.floor(Math.random() * 19) * box
-        };
+<section id="works" class="tight">
+  <div class="container">
+    <div class="intro">
+      <div class="eyebrow">WORKS</div>
+      <h2>A selection of recent projects.</h2>
+      <p>Branding, campaign art and gaming identity work for clients and communities across the region.</p>
+    </div>
+    <div class="work-grid">
+      <div class="work-card">
+        <img src="https://i.postimg.cc/FFT9tnKW/banner.png" alt="Campaign banner" loading="lazy">
+        <span class="tag">Campaign</span>
+      </div>
+      <div class="work-card">
+        <img src="https://i.postimg.cc/MTd8SvzT/1.png" alt="Brand project" loading="lazy">
+        <span class="tag">Branding</span>
+      </div>
+      <div class="work-card">
+        <img src="https://i.postimg.cc/T11vYfPz/18.png" alt="Project" loading="lazy">
+        <span class="tag">Art Direction</span>
+      </div>
+      <div class="work-card">
+        <img src="https://i.postimg.cc/Bv50mmk3/banner12.png" alt="Campaign banner" loading="lazy">
+        <span class="tag">Campaign</span>
+      </div>
+      <div class="work-card">
+        <img src="https://i.postimg.cc/G3g1g87p/banner23.png" alt="Campaign banner" loading="lazy">
+        <span class="tag">Campaign</span>
+      </div>
+      <div class="work-card">
+        <img src="https://i.postimg.cc/bvfP0769/Chat-GPT-Image-Sep-4-2026-at-12-17-01-PM.png" alt="Project artwork" loading="lazy">
+        <span class="tag">Art Direction</span>
+      </div>
+      <div class="work-card">
+        <img src="https://i.postimg.cc/0Q8qFp17/studio-logo.png" alt="Studio branding" loading="lazy">
+        <span class="tag">Branding</span>
+      </div>
+      <div class="work-card">
+        <img src="https://i.postimg.cc/QNYrY943/Untitled-1.png" alt="Project" loading="lazy">
+        <span class="tag">Gaming Design</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-        let score = 0;
-        let d;
+<section id="contact">
+  <div class="container">
+    <div class="intro">
+      <div class="eyebrow">CONTACT</div>
+      <h2>Let's build something that stands out.</h2>
+      <p>Tell us a bit about your project and we'll get back to you within a day.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Get in touch</h3>
+        <p>Whether it's a full brand identity or a single campaign asset, send us the brief and we'll take it from there.</p>
+        <ul class="contact-list">
+          <li>Email <span>hello@verqo.com</span></li>
+          <li>Discord <span>discord.gg/verqo</span></li>
+          <li>Instagram <span>@verqostudio</span></li>
+          <li>Response time <span>within 24 hours</span></li>
+        </ul>
+      </div>
 
-        document.addEventListener("keydown", direction);
+      <form class="contact-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Sent';">
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" type="text" placeholder="Your name" required>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="you@example.com" required>
+        </div>
+        <div class="field">
+          <label for="project">Project type</label>
+          <input id="project" type="text" placeholder="Branding, campaign, gaming design…">
+        </div>
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" rows="5" placeholder="Tell us about your project" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send message</button>
+      </form>
+    </div>
+  </div>
+</section>
 
-        function direction(event) {
-            if (event.keyCode == 37 && d != "RIGHT") {
-                d = "LEFT";
-            } else if (event.keyCode == 38 && d != "DOWN") {
-                d = "UP";
-            } else if (event.keyCode == 39 && d != "LEFT") {
-                d = "RIGHT";
-            } else if (event.keyCode == 40 && d != "UP") {
-                d = "DOWN";
-            }
-        }
+<footer id="site-footer"></footer>
 
-        function collision(head, array) {
-            for (let i = 0; i < array.length; i++) {
-                if (head.x == array[i].x && head.y == array[i].y) {
-                    return true;
-                }
-            }
-            return false;
-        }
+<script>
+const SITE_LOGO = "https://i.postimg.cc/B64GkR16/verqo-logo.png";
+const DISCORD_ORDER_LINK = "https://discord.gg/yQXH9xXHfE";
 
-        function draw() {
-            ctx.fillStyle = "#111";
-            ctx.fillRect(0, 0, 400, 400);
+const WORK_IMAGES = [
+  "https://i.postimg.cc/FFT9tnKW/banner.png",
+  "https://i.postimg.cc/MTd8SvzT/1.png",
+  "https://i.postimg.cc/T11vYfPz/18.png",
+  "https://i.postimg.cc/Bv50mmk3/banner12.png",
+  "https://i.postimg.cc/G3g1g87p/banner23.png",
+  "https://i.postimg.cc/bvfP0769/Chat-GPT-Image-Sep-4-2026-at-12-17-01-PM.png",
+  "https://i.postimg.cc/0Q8qFp17/studio-logo.png",
+  "https://i.postimg.cc/QNYrY943/Untitled-1.png"
+];
 
-            for (let i = 0; i < snake.length; i++) {
-                ctx.fillStyle = (i == 0) ? "#4CAF50" : "#8BC34A";
-                ctx.fillRect(snake[i].x, snake[i].y, box, box);
-                ctx.strokeStyle = "#111";
-                ctx.strokeRect(snake[i].x, snake[i].y, box, box);
-            }
+const NAV_LINKS = [
+  { label: "Home",     href: "#home",     match: "home" },
+  { label: "Services", href: "#services", match: "services" },
+  { label: "Works",    href: "#works",    match: "works" },
+  { label: "Contact",  href: "#contact",  match: "contact" }
+];
 
-            ctx.fillStyle = "#FF5722";
-            ctx.fillRect(food.x, food.y, box, box);
+const SERVICE_CATEGORIES = [
+  {
+    name: "Discord",
+    cover: "https://i.postimg.cc/Hkp2Vg7y/Discord.png",
+    images: [
+      "https://i.postimg.cc/m2Qy2qcH/1.png",
+      "https://i.postimg.cc/9QCt4pTG/2.png",
+      "https://i.postimg.cc/wjgctVJk/3.png",
+      "https://i.postimg.cc/zG8SLjWF/4.png"
+    ]
+  },
+  {
+    name: "Anime",
+    cover: "https://i.postimg.cc/4xJ5mghJ/Anime.png",
+    images: [
+      "https://i.postimg.cc/KY1tMvcz/1.png",
+      "https://i.postimg.cc/cJvfn41v/2.png",
+      "https://i.postimg.cc/Bvj2KQZK/3.png",
+      "https://i.postimg.cc/9fsZt5zF/4.png"
+    ]
+  },
+  {
+    name: "Branding",
+    cover: "https://i.postimg.cc/139HfQN4/Branding.png",
+    images: [
+      "https://i.postimg.cc/4NXt1142/1.png",
+      "https://i.postimg.cc/sD3SJJDr/2.png",
+      "https://i.postimg.cc/jdRNhhdK/3.png",
+      "https://i.postimg.cc/BQJDCCQ4/4.png"
+    ]
+  },
+  {
+    name: "FiveM",
+    cover: "https://i.postimg.cc/htSrfB7m/Five-m.png",
+    images: [
+      "https://i.postimg.cc/g0L60S43/1.png",
+      "https://i.postimg.cc/HL87LZ34/2.png",
+      "https://i.postimg.cc/C1ynnG6R/3.png"
+    ]
+  },
+  {
+    name: "Instagram",
+    cover: "https://i.postimg.cc/7ZxVfkT7/Instagram.png",
+    images: [
+      "https://i.postimg.cc/3NYynKhB/1.png",
+      "https://i.postimg.cc/RhdWYjCf/2.png",
+      "https://i.postimg.cc/Y0RvPJ21/3.png"
+    ]
+  },
+  {
+    name: "Streaming",
+    cover: "https://i.postimg.cc/BnMCFVxj/Twitch.png",
+    images: [
+      "https://i.postimg.cc/vZkcC7Ms/1.png",
+      "https://i.postimg.cc/52T6D51N/2.png",
+      "https://i.postimg.cc/sgqvbPyX/3.png",
+      "https://i.postimg.cc/mgJtK3Rh/4.png"
+    ]
+  }
+];
 
-            let snakeX = snake[0].x;
-            let snakeY = snake[0].y;
+function renderHeader(){
+  const mount = document.getElementById("site-header");
+  if(!mount) return;
 
-            if (d == "LEFT") snakeX -= box;
-            if (d == "UP") snakeY -= box;
-            if (d == "RIGHT") snakeX += box;
-            if (d == "DOWN") snakeY += box;
+  const links = NAV_LINKS.map(l =>
+    `<a href="${l.href}" data-section="${l.match}" class="${l.match === "home" ? "active" : ""}">${l.label}</a>`
+  ).join("");
 
-            if (snakeX == food.x && snakeY == food.y) {
-                score++;
-                document.getElementById("score").innerText = "النقاط: " + score;
-                food = {
-                    x: Math.floor(Math.random() * 19) * box,
-                    y: Math.floor(Math.random() * 19) * box
-                };
-            } else {
-                snake.pop();
-            }
+  mount.innerHTML = `
+    <a href="#home" class="logo"><img src="${SITE_LOGO}" alt="VERQO"></a>
+    <nav class="glass-nav">${links}</nav>
+  `;
+}
 
-            let newHead = {
-                x: snakeX,
-                y: snakeY
-            };
+function renderFooter(){
+  const mount = document.getElementById("site-footer");
+  if(!mount) return;
+  mount.innerHTML = `
+    <div class="container footer-row">
+      <a href="#home" class="logo"><img src="${SITE_LOGO}" alt="VERQO"></a>
+      <div class="footer-links">
+        <a href="#home">Home</a>
+        <a href="#services">Services</a>
+        <a href="#works">Works</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer-note">&copy; 2026 VERQO</div>
+    </div>
+  `;
+}
 
-            if (snakeX < 0 || snakeX >= canvas.width || snakeY < 0 || snakeY >= canvas.height || collision(newHead, snake)) {
-                clearInterval(game);
-                alert("انتهت اللعبة! نقاطك النهائية هي: " + score);
-                location.reload();
-            }
+function renderMarquee(){
+  const wrap = document.getElementById("marquee-wrap");
+  if(!wrap) return;
 
-            snake.unshift(newHead);
-        }
+  const rows = [
+    { dir: "left",  duration: 42, images: [0, 1, 2, 3, 4] },
+    { dir: "right", duration: 52, images: [5, 6, 7, 0, 1] },
+    { dir: "left",  duration: 46, images: [2, 3, 4, 5, 6] },
+    { dir: "right", duration: 58, images: [7, 0, 1, 2, 3] }
+  ];
 
-        let game = setInterval(draw, 100);
-    </script>
+  rows.forEach(row => {
+    const rowEl = document.createElement("div");
+    rowEl.className = `marquee-row ${row.dir}`;
+    rowEl.style.animationDuration = row.duration + "s";
+
+    for(let copy = 0; copy < 2; copy++){
+      row.images.forEach((idx, i) => {
+        const img = document.createElement("img");
+        img.src = WORK_IMAGES[idx];
+        img.alt = "";
+        img.loading = (copy === 0 && i < 3) ? "eager" : "lazy";
+        rowEl.appendChild(img);
+      });
+    }
+    wrap.appendChild(rowEl);
+  });
+}
+
+function renderServices(){
+  const grid = document.getElementById("services-grid");
+  if(!grid) return;
+
+  grid.innerHTML = SERVICE_CATEGORIES.map((cat, i) => `
+    <div class="service-card" data-index="${i}" role="button" tabindex="0">
+      <img src="${cat.cover}" alt="${cat.name} service" loading="lazy">
+      <div class="service-overlay"></div>
+      <span class="service-label">${cat.name}</span>
+      <span class="service-hint">View Prices</span>
+    </div>
+  `).join("");
+
+  grid.querySelectorAll(".service-card").forEach(card => {
+    const toggle = () => toggleServiceDropdown(Number(card.dataset.index));
+    card.addEventListener("click", toggle);
+    card.addEventListener("keydown", (e) => {
+      if(e.key === "Enter" || e.key === " "){ e.preventDefault(); toggle(); }
+    });
+  });
+}
+
+let activeServiceIndex = null;
+
+function toggleServiceDropdown(index){
+  const drawer = document.getElementById("service-dropdown-drawer");
+  const cards = document.querySelectorAll(".service-card");
+  const titleEl = document.getElementById("drawer-title");
+  const itemsGrid = document.getElementById("drawer-items-grid");
+
+  if(!drawer) return;
+
+  if(activeServiceIndex === index && drawer.classList.contains("open")){
+    // Close drawer
+    drawer.classList.remove("open");
+    cards.forEach(c => c.classList.remove("active"));
+    activeServiceIndex = null;
+    return;
+  }
+
+  activeServiceIndex = index;
+  const cat = SERVICE_CATEGORIES[index];
+  if(!cat) return;
+
+  cards.forEach((c, idx) => {
+    c.classList.toggle("active", idx === index);
+  });
+
+  titleEl.textContent = `${cat.name} — Price List`;
+  itemsGrid.innerHTML = cat.images.map(src => `
+    <div class="drawer-item">
+      <img src="${src}" alt="${cat.name} pricing item" loading="lazy">
+      <a href="${DISCORD_ORDER_LINK}" target="_blank" rel="noopener" class="order-btn">Order</a>
+    </div>
+  `).join("");
+
+  drawer.classList.add("open");
+
+  // Smooth scroll down to drawer if it opened below view
+  setTimeout(() => {
+    drawer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+}
+
+function setupServiceDropdownControls(){
+  const closeBtn = document.getElementById("drawer-close");
+  const drawer = document.getElementById("service-dropdown-drawer");
+  if(!closeBtn || !drawer) return;
+
+  closeBtn.addEventListener("click", () => {
+    drawer.classList.remove("open");
+    document.querySelectorAll(".service-card").forEach(c => c.classList.remove("active"));
+    activeServiceIndex = null;
+  });
+}
+
+function setupScrollSpy(){
+  const sections = ["home", "services", "works", "contact"]
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
+
+  const links = () => Array.from(document.querySelectorAll(".glass-nav a"));
+
+  const setActive = (id) => {
+    links().forEach(a => {
+      a.classList.toggle("active", a.dataset.section === id);
+    });
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        setActive(entry.target.id);
+      }
+    });
+  }, {
+    root: null,
+    rootMargin: "-45% 0px -45% 0px",
+    threshold: 0
+  });
+
+  sections.forEach(sec => observer.observe(sec));
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderHeader();
+  renderFooter();
+  renderMarquee();
+  renderServices();
+  setupServiceDropdownControls();
+  setupScrollSpy();
+});
+</script>
+
 </body>
 </html>
