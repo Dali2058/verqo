@@ -3,25 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crocodora Creative Studio — Home</title>
+<title>VERQO — Branding, Art Direction & Gaming Design</title>
 
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Crocodora Creative Studio">
-<meta property="og:url" content="https://crocodorastudio.com/">
-<meta property="og:title" content="Crocodora Creative Studio — We Build Brands That Stand Out">
+<meta property="og:site_name" content="VERQO">
+<meta property="og:url" content="https://verqo.com/">
+<meta property="og:title" content="VERQO — We Build Brands That Stand Out">
 <meta property="og:description" content="Branding, art direction and gaming design for brands and communities that want to lead the scene.">
 <meta property="og:image" content="https://i.postimg.cc/25Bp1rnj/image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Crocodora Creative Studio — We Build Brands That Stand Out">
+<meta name="twitter:title" content="VERQO — We Build Brands That Stand Out">
 <meta name="twitter:description" content="Branding, art direction and gaming design for brands and communities that want to lead the scene.">
 <meta name="twitter:image" content="https://i.postimg.cc/25Bp1rnj/image.png">
-<link rel="icon" href="https://i.postimg.cc/L4w8Y133/Asset-114x.png">
+<link rel="icon" href="https://REPLACE-WITH-HOSTED-LOGO-URL/verqo-favicon.png">
 <style>
 /* ============================================
-   CROCODORA CREATIVE STUDIO — shared stylesheet
+   VERQO — shared stylesheet
    ============================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
@@ -516,64 +516,179 @@ footer{
   .marquee-row, .glass-nav::before{ animation: none !important; }
 }
 
+
+/* single-page scroll targets */
+section[id]{
+  scroll-margin-top: 100px;
+}
+.intro{
+  max-width: 60ch;
+  margin-bottom: 46px;
+}
+.intro .eyebrow{
+  font-size: 13px;
+  color: var(--ink-dim);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.intro h2{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(30px, 4.2vw, 46px);
+  line-height: 1.05;
+  margin: 0 0 16px;
+}
+.intro p{
+  font-size: 15px;
+  color: var(--ink-dim);
+  line-height: 1.6;
+  margin: 0;
+}
 </style>
 </head>
 <body data-page="home">
 
 <header id="site-header" class="site-header"></header>
 
-<section class="hero">
+<section id="home" class="hero">
   <div class="marquee-wrap" id="marquee-wrap"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow">CROCODORA CREATIVE STUDIO // 2026 EDITION</div>
+    <div class="hero-eyebrow">VERQO // 2026 EDITION</div>
     <h1 class="hero-title">We build brands that stand out.</h1>
     <div class="hero-tagline">Branding · Art Direction · Gaming Design</div>
     <div class="hero-cta">
-      <a href="/services" class="btn btn-primary">Our Services</a>
-      <a href="/works" class="btn btn-ghost">Explore Work</a>
+      <a href="#services" class="btn btn-primary">Our Services</a>
+      <a href="#works" class="btn btn-ghost">Explore Work</a>
     </div>
   </div>
   <div class="scroll-hint">Scroll down to explore</div>
 </section>
 
-<section>
+<section id="services">
   <div class="container">
-    <div class="section-head">
-      <h2>What we do</h2>
-      <span>From billboard campaigns to in-game identity, we shape brands people remember.</span>
+    <div class="intro">
+      <div class="eyebrow">SERVICES</div>
+      <h2>Everything a brand needs, under one studio.</h2>
+      <p>We work across branding, campaign art direction and gaming identity — picking up projects at any stage, from a first sketch to a full rollout.</p>
     </div>
     <div class="services-grid">
       <div class="service-card">
         <span class="num">01</span>
         <h3>Branding</h3>
-        <p>Identity systems, logos and visual languages built to travel across every surface.</p>
+        <p>Logos, identity systems, brand guidelines and naming — the foundation everything else is built on.</p>
       </div>
       <div class="service-card">
         <span class="num">02</span>
         <h3>Art Direction</h3>
-        <p>Campaign visuals, key art and creative direction for launches and product drops.</p>
+        <p>Key visuals, campaign concepts and billboard/OOH creative for product and service launches.</p>
       </div>
       <div class="service-card">
         <span class="num">03</span>
         <h3>Gaming Design</h3>
-        <p>Clan logos, esports branding and in-game asset design for communities and studios.</p>
+        <p>Clan and esports branding, in-game banners, Discord assets and community identity design.</p>
+      </div>
+      <div class="service-card">
+        <span class="num">04</span>
+        <h3>Social &amp; Ad Creative</h3>
+        <p>App store assets, paid social creative and short-form video graphics built to perform.</p>
+      </div>
+      <div class="service-card">
+        <span class="num">05</span>
+        <h3>App &amp; Product Design</h3>
+        <p>Interface design and product screens for apps and digital services, from concept to handoff.</p>
+      </div>
+      <div class="service-card">
+        <span class="num">06</span>
+        <h3>Motion &amp; Presentation</h3>
+        <p>Animated logo stings, pitch decks and presentation design for launches and investor decks.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="tight">
+<section id="works" class="tight">
   <div class="container">
-    <div class="section-head">
-      <h2>Selected work</h2>
-      <span>A few recent projects.</span>
+    <div class="intro">
+      <div class="eyebrow">WORKS</div>
+      <h2>A selection of recent projects.</h2>
+      <p>Branding, campaign art and gaming identity work for clients and communities across the region.</p>
     </div>
     <div class="work-grid">
-      <div class="work-card"><img src="https://i.postimg.cc/FFT9tnKW/banner.png" alt="Project banner"></div>
-      <div class="work-card"><img src="https://i.postimg.cc/MTd8SvzT/1.png" alt="Project"></div>
-      <div class="work-card"><img src="https://i.postimg.cc/T11vYfPz/18.png" alt="Project"></div>
-      <div class="work-card"><img src="https://i.postimg.cc/Bv50mmk3/banner12.png" alt="Project banner"></div>
+      <div class="work-card">
+        <img src="https://i.postimg.cc/FFT9tnKW/banner.png" alt="Campaign banner">
+        <span class="tag">Campaign</span>
+      </div>
+      <div class="work-card">
+        <img src="https://i.postimg.cc/MTd8SvzT/1.png" alt="Brand project">
+        <span class="tag">Branding</span>
+      </div>
+      <div class="work-card">
+        <img src="https://i.postimg.cc/T11vYfPz/18.png" alt="Project">
+        <span class="tag">Art Direction</span>
+      </div>
+      <div class="work-card">
+        <img src="https://i.postimg.cc/Bv50mmk3/banner12.png" alt="Campaign banner">
+        <span class="tag">Campaign</span>
+      </div>
+      <div class="work-card">
+        <img src="https://i.postimg.cc/G3g1g87p/banner23.png" alt="Campaign banner">
+        <span class="tag">Campaign</span>
+      </div>
+      <div class="work-card">
+        <img src="https://i.postimg.cc/bvfP0769/Chat-GPT-Image-Sep-4-2026-at-12-17-01-PM.png" alt="Project artwork">
+        <span class="tag">Art Direction</span>
+      </div>
+      <div class="work-card">
+        <img src="https://i.postimg.cc/0Q8qFp17/studio-logo.png" alt="Studio branding">
+        <span class="tag">Branding</span>
+      </div>
+      <div class="work-card">
+        <img src="https://i.postimg.cc/QNYrY943/Untitled-1.png" alt="Project">
+        <span class="tag">Gaming Design</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <div class="intro">
+      <div class="eyebrow">CONTACT</div>
+      <h2>Let's build something that stands out.</h2>
+      <p>Tell us a bit about your project and we'll get back to you within a day.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Get in touch</h3>
+        <p>Whether it's a full brand identity or a single campaign asset, send us the brief and we'll take it from there.</p>
+        <ul class="contact-list">
+          <li>Email <span>hello@verqo.com</span></li>
+          <li>Discord <span>discord.gg/verqo</span></li>
+          <li>Instagram <span>@verqostudio</span></li>
+          <li>Response time <span>within 24 hours</span></li>
+        </ul>
+      </div>
+
+      <form class="contact-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Sent';">
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" type="text" placeholder="Your name" required>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="you@example.com" required>
+        </div>
+        <div class="field">
+          <label for="project">Project type</label>
+          <input id="project" type="text" placeholder="Branding, campaign, gaming design…">
+        </div>
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" rows="5" placeholder="Tell us about your project" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send message</button>
+      </form>
     </div>
   </div>
 </section>
@@ -581,11 +696,7 @@ footer{
 <footer id="site-footer"></footer>
 
 <script>
-/* ============================================
-   CROCODORA CREATIVE STUDIO — shared behaviour
-   ============================================ */
-
-const SITE_LOGO = "https://i.postimg.cc/L4w8Y133/Asset-114x.png";
+const SITE_LOGO = "https://REPLACE-WITH-HOSTED-LOGO-URL/verqo-logo.png";
 
 const WORK_IMAGES = [
   "https://i.postimg.cc/FFT9tnKW/banner.png",
@@ -599,23 +710,22 @@ const WORK_IMAGES = [
 ];
 
 const NAV_LINKS = [
-  { label: "Home",     href: "/",     match: "home" },
-  { label: "Services", href: "/services", match: "services" },
-  { label: "Works",    href: "/works",    match: "works" },
-  { label: "Contact",  href: "/contact",  match: "contact" }
+  { label: "Home",     href: "#home",     match: "home" },
+  { label: "Services", href: "#services", match: "services" },
+  { label: "Works",    href: "#works",    match: "works" },
+  { label: "Contact",  href: "#contact",  match: "contact" }
 ];
 
 function renderHeader(){
   const mount = document.getElementById("site-header");
   if(!mount) return;
-  const current = document.body.dataset.page || "home";
 
   const links = NAV_LINKS.map(l =>
-    `<a href="${l.href}" class="${l.match === current ? "active" : ""}">${l.label}</a>`
+    `<a href="${l.href}" data-section="${l.match}" class="${l.match === "home" ? "active" : ""}">${l.label}</a>`
   ).join("");
 
   mount.innerHTML = `
-    <a href="/" class="logo"><img src="${SITE_LOGO}" alt="Crocodora Creative Studio"></a>
+    <a href="#home" class="logo"><img src="${SITE_LOGO}" alt="VERQO"></a>
     <nav class="glass-nav">${links}</nav>
   `;
 }
@@ -625,14 +735,14 @@ function renderFooter(){
   if(!mount) return;
   mount.innerHTML = `
     <div class="container footer-row">
-      <a href="/" class="logo"><img src="${SITE_LOGO}" alt="Crocodora Creative Studio"></a>
+      <a href="#home" class="logo"><img src="${SITE_LOGO}" alt="VERQO"></a>
       <div class="footer-links">
-        <a href="/">Home</a>
-        <a href="/services">Services</a>
-        <a href="/works">Works</a>
-        <a href="/contact">Contact</a>
+        <a href="#home">Home</a>
+        <a href="#services">Services</a>
+        <a href="#works">Works</a>
+        <a href="#contact">Contact</a>
       </div>
-      <div class="footer-note">&copy; 2026 Crocodora Creative Studio</div>
+      <div class="footer-note">&copy; 2026 VERQO</div>
     </div>
   `;
 }
@@ -656,7 +766,6 @@ function renderMarquee(){
     rowEl.className = `marquee-row ${row.dir}`;
     rowEl.style.animationDuration = row.duration + "s";
 
-    // duplicate the tile set twice so translateX(-50%) loops seamlessly
     for(let copy = 0; copy < 2; copy++){
       row.images.forEach((idx, i) => {
         const img = document.createElement("img");
@@ -670,12 +779,43 @@ function renderMarquee(){
   });
 }
 
+/* Scrollspy — the active pill in the nav follows whichever section
+   is currently in view, without needing a page reload. */
+function setupScrollSpy(){
+  const sections = ["home", "services", "works", "contact"]
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
+
+  const links = () => Array.from(document.querySelectorAll(".glass-nav a"));
+
+  const setActive = (id) => {
+    links().forEach(a => {
+      a.classList.toggle("active", a.dataset.section === id);
+    });
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        setActive(entry.target.id);
+      }
+    });
+  }, {
+    root: null,
+    rootMargin: "-45% 0px -45% 0px",
+    threshold: 0
+  });
+
+  sections.forEach(sec => observer.observe(sec));
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderHeader();
   renderFooter();
   renderMarquee();
+  setupScrollSpy();
 });
-
 </script>
+
 </body>
 </html>
