@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crocodora Creative Studio — Works</title>
+<title>Crocodora Creative Studio — Contact</title>
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Crocodora Creative Studio">
-<meta property="og:url" content="https://crocodorastudio.com/works">
-<meta property="og:title" content="Works — Crocodora Creative Studio">
-<meta property="og:description" content="A selection of recent branding, campaign and gaming identity projects by Crocodora Creative Studio.">
+<meta property="og:url" content="https://crocodorastudio.com/contact">
+<meta property="og:title" content="Contact — Crocodora Creative Studio">
+<meta property="og:description" content="Let's build something that stands out. Get in touch with Crocodora Creative Studio.">
 <meta property="og:image" content="https://i.postimg.cc/25Bp1rnj/image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Works — Crocodora Creative Studio">
-<meta name="twitter:description" content="A selection of recent branding, campaign and gaming identity projects by Crocodora Creative Studio.">
+<meta name="twitter:title" content="Contact — Crocodora Creative Studio">
+<meta name="twitter:description" content="Let's build something that stands out. Get in touch with Crocodora Creative Studio.">
 <meta name="twitter:image" content="https://i.postimg.cc/25Bp1rnj/image.png">
 <link rel="icon" href="https://i.postimg.cc/L4w8Y133/Asset-114x.png">
 <style>
@@ -518,64 +518,52 @@ footer{
 
 </style>
 </head>
-<body data-page="works">
+<body data-page="contact">
 
 <header id="site-header" class="site-header"></header>
 
 <section class="page-hero">
   <div class="container">
-    <div class="eyebrow">WORKS</div>
-    <h1>A selection of recent projects.</h1>
-    <p>Branding, campaign art and gaming identity work for clients and communities across the region.</p>
+    <div class="eyebrow">CONTACT</div>
+    <h1>Let's build something that stands out.</h1>
+    <p>Tell us a bit about your project and we'll get back to you within a day.</p>
   </div>
 </section>
 
 <section>
   <div class="container">
-    <div class="work-grid">
-      <div class="work-card">
-        <img src="https://i.postimg.cc/FFT9tnKW/banner.png" alt="Campaign banner">
-        <span class="tag">Campaign</span>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Get in touch</h3>
+        <p>Whether it's a full brand identity or a single campaign asset, send us the brief and we'll take it from there.</p>
+        <ul class="contact-list">
+          <li>Email <span>hello@crocodorastudio.com</span></li>
+          <li>Discord <span>discord.gg/crocodora</span></li>
+          <li>Instagram <span>@crocodorastudio</span></li>
+          <li>Response time <span>within 24 hours</span></li>
+        </ul>
       </div>
-      <div class="work-card">
-        <img src="https://i.postimg.cc/MTd8SvzT/1.png" alt="Brand project">
-        <span class="tag">Branding</span>
-      </div>
-      <div class="work-card">
-        <img src="https://i.postimg.cc/T11vYfPz/18.png" alt="Project">
-        <span class="tag">Art Direction</span>
-      </div>
-      <div class="work-card">
-        <img src="https://i.postimg.cc/Bv50mmk3/banner12.png" alt="Campaign banner">
-        <span class="tag">Campaign</span>
-      </div>
-      <div class="work-card">
-        <img src="https://i.postimg.cc/G3g1g87p/banner23.png" alt="Campaign banner">
-        <span class="tag">Campaign</span>
-      </div>
-      <div class="work-card">
-        <img src="https://i.postimg.cc/bvfP0769/Chat-GPT-Image-Sep-4-2026-at-12-17-01-PM.png" alt="Project artwork">
-        <span class="tag">Art Direction</span>
-      </div>
-      <div class="work-card">
-        <img src="https://i.postimg.cc/0Q8qFp17/studio-logo.png" alt="Studio branding">
-        <span class="tag">Branding</span>
-      </div>
-      <div class="work-card">
-        <img src="https://i.postimg.cc/QNYrY943/Untitled-1.png" alt="Project">
-        <span class="tag">Gaming Design</span>
-      </div>
-    </div>
-  </div>
-</section>
 
-<section class="tight">
-  <div class="container">
-    <div class="section-head">
-      <h2>Like what you see?</h2>
-      <span>Let's talk about your next project.</span>
+      <form class="contact-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Sent';">
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" type="text" placeholder="Your name" required>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="you@example.com" required>
+        </div>
+        <div class="field">
+          <label for="project">Project type</label>
+          <input id="project" type="text" placeholder="Branding, campaign, gaming design…">
+        </div>
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" rows="5" placeholder="Tell us about your project" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send message</button>
+      </form>
     </div>
-    <a href="/contact" class="btn btn-primary">Get in touch</a>
   </div>
 </section>
 
