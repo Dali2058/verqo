@@ -452,14 +452,24 @@ section.tight{ padding: 60px 0; }
 }
 .contact-list{ list-style:none; padding:0; margin:0; }
 .contact-list li{
-  padding: 16px 0;
   border-top: 1px solid var(--line);
-  display:flex;
-  justify-content: space-between;
   font-size: 14.5px;
 }
 .contact-list li:last-child{ border-bottom: 1px solid var(--line); }
-.contact-list span{ color: var(--ink-dim); }
+.contact-list a{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 4px;
+  color: var(--ink);
+  transition: color .2s ease, padding-left .25s ease;
+}
+.contact-list a:hover{
+  color: var(--chrome-1);
+  padding-left: 8px;
+}
+.contact-list span{ color: var(--ink-dim); transition: color .2s ease; }
+.contact-list a:hover span{ color: var(--ink-dim); }
 
 .field{
   margin-bottom: 18px;
@@ -797,7 +807,7 @@ section[id]{
 --------------------------------- */
 .clients-heading{
   text-align: center;
-  direction: rtl;
+  direction: ltr;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: clamp(26px, 3.6vw, 38px);
@@ -816,9 +826,11 @@ section[id]{
   gap: 70px;
   width: max-content;
   animation: scrollLeft linear infinite;
+  opacity: 0;
+  transition: opacity .5s ease;
 }
 .clients-marquee-track img{
-  height: calc(32px * var(--logo-scale, 1));
+  height: calc(42px * var(--logo-scale, 1));
   width: auto;
   object-fit: contain;
   filter: brightness(0) invert(1);
@@ -830,7 +842,7 @@ section[id]{
 }
 @media (max-width: 720px){
   .clients-marquee-track{ gap: 42px; }
-  .clients-marquee-track img{ height: calc(22px * var(--logo-scale, 1)); }
+  .clients-marquee-track img{ height: calc(29px * var(--logo-scale, 1)); }
 }
 </style>
 </head>
@@ -847,12 +859,12 @@ section[id]{
       <h1 class="hero-title">We don't follow trends.<br>We create them.</h1>
       <div class="hero-tagline">Ideas that make an impact.</div>
       <div class="hero-cta">
-        <a href="#services" class="cta-sweep">
-          Our Services
+        <a href="https://discord.gg/yQXH9xXHfE" target="_blank" rel="noopener noreferrer" class="cta-sweep">
+          Join Our World
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 18L18 6M18 6H9M18 6V15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
         <a href="#works" class="cta-line">
-          Explore Work
+          Discover
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
@@ -862,7 +874,7 @@ section[id]{
 
   <div class="hero-clients">
     <div class="container">
-      <h2 class="clients-heading">أبرز عملائنا</h2>
+      <h2 class="clients-heading">Our Clients</h2>
     </div>
     <div class="clients-marquee-wrap">
       <div class="clients-marquee-track" id="clients-marquee-track"></div>
@@ -913,10 +925,12 @@ section[id]{
         <h3>Get in touch</h3>
         <p>Whether it's a full brand identity or a single campaign asset, send us the brief and we'll take it from there.</p>
         <ul class="contact-list">
-          <li>Email <span>hello@verqo.com</span></li>
-          <li>Discord <span>discord.gg/verqo</span></li>
-          <li>Instagram <span>@verqostudio</span></li>
-          <li>Response time <span>within 24 hours</span></li>
+          <li><a href="https://discord.gg/yQXH9xXHfE" target="_blank" rel="noopener noreferrer">Discord Contact <span>discord.gg/yQXH9xXHfE</span></a></li>
+          <li><a href="https://linktr.ee/i7amada" target="_blank" rel="noopener noreferrer">Linktree <span>linktr.ee/i7amada</span></a></li>
+          <li><a href="https://www.instagram.com/verqostudio/" target="_blank" rel="noopener noreferrer">Instagram <span>@verqostudio</span></a></li>
+          <li><a href="https://www.youtube.com/@VerqoStudio" target="_blank" rel="noopener noreferrer">YouTube <span>@VerqoStudio</span></a></li>
+          <li><a href="https://www.behance.net/verqostudio" target="_blank" rel="noopener noreferrer">Behance <span>behance.net/verqostudio</span></a></li>
+          <li><a href="https://wa.me/201036113970" target="_blank" rel="noopener noreferrer">WhatsApp <span>+20 103 611 3970</span></a></li>
         </ul>
       </div>
 
@@ -1125,78 +1139,85 @@ const LOGO_FALLBACK_SCALE = {
   "https://i.postimg.cc/W4PjwMtB/logo-white-png.webp": 1.8
 };
 
-function normalizeLogoSize(img){
-  const applyFallback = () => {
-    const scale = LOGO_FALLBACK_SCALE[img.getAttribute("src")] || 1;
-    img.style.setProperty("--logo-scale", scale);
-  };
+function measureLogoScale(src){
+  return new Promise((resolve) => {
+    const probe = new Image();
+    probe.crossOrigin = "anonymous";
 
-  try{
-    const w = img.naturalWidth, h = img.naturalHeight;
-    if(!w || !h){ applyFallback(); return; }
+    const finishWithFallback = () => resolve(LOGO_FALLBACK_SCALE[src] || 1);
 
-    const canvas = document.createElement("canvas");
-    canvas.width = w;
-    canvas.height = h;
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0, w, h);
+    probe.onload = () => {
+      try{
+        const w = probe.naturalWidth, h = probe.naturalHeight;
+        if(!w || !h){ finishWithFallback(); return; }
 
-    const { data } = ctx.getImageData(0, 0, w, h);
-    const threshold = 12;
-    let top = null, bottom = null;
-    const step = Math.max(1, Math.floor(w / 200)); // sample columns for speed
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(probe, 0, 0, w, h);
 
-    for(let y = 0; y < h; y++){
-      let hasInk = false;
-      const rowStart = y * w * 4;
-      for(let x = 0; x < w; x += step){
-        if(data[rowStart + x * 4 + 3] > threshold){ hasInk = true; break; }
+        const { data } = ctx.getImageData(0, 0, w, h);
+        const threshold = 12;
+        let top = null, bottom = null;
+        const step = Math.max(1, Math.floor(w / 200)); // sample columns for speed
+
+        for(let y = 0; y < h; y++){
+          let hasInk = false;
+          const rowStart = y * w * 4;
+          for(let x = 0; x < w; x += step){
+            if(data[rowStart + x * 4 + 3] > threshold){ hasInk = true; break; }
+          }
+          if(hasInk){
+            if(top === null) top = y;
+            bottom = y;
+          }
+        }
+
+        if(top === null){ finishWithFallback(); return; }
+
+        const contentRatio = (bottom - top + 1) / h;
+        if(contentRatio <= 0.02){ finishWithFallback(); return; }
+
+        resolve(Math.max(1, Math.min(1 / contentRatio, 2.3)));
+      }catch(err){
+        // canvas got tainted by a cross-origin image with no CORS headers
+        finishWithFallback();
       }
-      if(hasInk){
-        if(top === null) top = y;
-        bottom = y;
-      }
-    }
+    };
 
-    if(top === null){ applyFallback(); return; }
-
-    const contentRatio = (bottom - top + 1) / h;
-    if(contentRatio <= 0.02){ applyFallback(); return; }
-
-    const scale = Math.max(1, Math.min(1 / contentRatio, 2.3));
-    img.style.setProperty("--logo-scale", scale.toFixed(3));
-  }catch(err){
-    // canvas got tainted by a cross-origin image with no CORS headers
-    applyFallback();
-  }
+    probe.onerror = finishWithFallback;
+    probe.src = src;
+  });
 }
 
-function renderClients(){
+async function renderClients(){
   const track = document.getElementById("clients-marquee-track");
   if(!track) return;
 
-  track.innerHTML = "";
+  // Measure every logo BEFORE touching the DOM. Sizing images after they're
+  // already mounted and animating causes the track's width to keep changing
+  // mid-scroll, which is what made logos visibly jump/blink in and out.
+  const scales = await Promise.all(CLIENT_LOGOS.map(measureLogoScale));
 
-  const makeLogo = (src) => {
+  const buildSet = () => CLIENT_LOGOS.map((src, i) => {
     const img = document.createElement("img");
     img.alt = "Client logo";
-    img.loading = "lazy";
-    img.crossOrigin = "anonymous";
+    img.loading = "eager";
+    img.decoding = "async";
+    img.style.setProperty("--logo-scale", scales[i].toFixed(3));
     img.src = src;
-    if(img.complete && img.naturalWidth){
-      normalizeLogoSize(img);
-    }else{
-      img.addEventListener("load", () => normalizeLogoSize(img));
-    }
     return img;
-  };
+  });
 
+  track.innerHTML = "";
   // duplicate the full set once so translateX(-50%) loops seamlessly, no gaps
-  CLIENT_LOGOS.forEach(src => track.appendChild(makeLogo(src)));
-  CLIENT_LOGOS.forEach(src => track.appendChild(makeLogo(src)));
+  buildSet().forEach(img => track.appendChild(img));
+  buildSet().forEach(img => track.appendChild(img));
 
   const duration = Math.max(20, CLIENT_LOGOS.length * 3.5);
   track.style.animationDuration = duration + "s";
+  requestAnimationFrame(() => { track.style.opacity = "1"; });
 }
 
 function renderServices(){
