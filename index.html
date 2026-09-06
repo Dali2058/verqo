@@ -664,6 +664,103 @@ section[id]{
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(255,255,255,.25);
 }
+
+/* ---------------------------------
+   Works — auto-rotating 3D carousel
+--------------------------------- */
+.works-carousel-stage{
+  position: relative;
+  width: 100%;
+  height: 460px;
+  margin-top: 8px;
+  perspective: 1500px;
+}
+.works-carousel-3d{
+  --radius: 460px;
+  --slide-w: 250px;
+  --slide-h: 330px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 1px;
+  transform-style: preserve-3d;
+  animation: spinCarousel 34s linear infinite;
+}
+.works-carousel-3d .carousel-slide{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--slide-w);
+  height: var(--slide-h);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--bg-soft);
+  box-shadow: 0 20px 50px rgba(0,0,0,.55);
+  transform: translate(-50%, -50%) rotateY(var(--angle, 0deg)) translateZ(var(--radius));
+}
+.works-carousel-3d .carousel-slide img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+@keyframes spinCarousel{
+  from{ transform: rotateY(0deg); }
+  to{ transform: rotateY(360deg); }
+}
+@media (prefers-reduced-motion: reduce){
+  .works-carousel-3d{ animation: none; }
+}
+@media (max-width: 900px){
+  .works-carousel-stage{ height: 360px; }
+  .works-carousel-3d{ --radius: 320px; --slide-w: 200px; --slide-h: 260px; }
+}
+@media (max-width: 560px){
+  .works-carousel-stage{ height: 260px; }
+  .works-carousel-3d{ --radius: 210px; --slide-w: 145px; --slide-h: 190px; }
+}
+
+/* ---------------------------------
+   Clients — infinite logo marquee
+--------------------------------- */
+.clients-heading{
+  text-align: center;
+  direction: rtl;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(26px, 3.6vw, 38px);
+  margin: 0 0 46px;
+  color: var(--ink);
+}
+.clients-marquee-wrap{
+  overflow: hidden;
+  width: 100%;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.clients-marquee-track{
+  display: flex;
+  align-items: center;
+  gap: 70px;
+  width: max-content;
+  animation: scrollLeft linear infinite;
+}
+.clients-marquee-track img{
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: .9;
+  flex: 0 0 auto;
+}
+@media (prefers-reduced-motion: reduce){
+  .clients-marquee-track{ animation: none; }
+}
+@media (max-width: 720px){
+  .clients-marquee-track{ gap: 42px; }
+  .clients-marquee-track img{ height: 22px; }
+}
 </style>
 </head>
 <body data-page="home">
@@ -710,40 +807,18 @@ section[id]{
       <h2>A selection of recent projects.</h2>
       <p>Branding, campaign art and gaming identity work for clients and communities across the region.</p>
     </div>
-    <div class="work-grid">
-      <div class="work-card">
-        <img src="https://i.postimg.cc/FFT9tnKW/banner.png" alt="Campaign banner" loading="lazy">
-        <span class="tag">Campaign</span>
-      </div>
-      <div class="work-card">
-        <img src="https://i.postimg.cc/MTd8SvzT/1.png" alt="Brand project" loading="lazy">
-        <span class="tag">Branding</span>
-      </div>
-      <div class="work-card">
-        <img src="https://i.postimg.cc/T11vYfPz/18.png" alt="Project" loading="lazy">
-        <span class="tag">Art Direction</span>
-      </div>
-      <div class="work-card">
-        <img src="https://i.postimg.cc/Bv50mmk3/banner12.png" alt="Campaign banner" loading="lazy">
-        <span class="tag">Campaign</span>
-      </div>
-      <div class="work-card">
-        <img src="https://i.postimg.cc/G3g1g87p/banner23.png" alt="Campaign banner" loading="lazy">
-        <span class="tag">Campaign</span>
-      </div>
-      <div class="work-card">
-        <img src="https://i.postimg.cc/bvfP0769/Chat-GPT-Image-Sep-4-2026-at-12-17-01-PM.png" alt="Project artwork" loading="lazy">
-        <span class="tag">Art Direction</span>
-      </div>
-      <div class="work-card">
-        <img src="https://i.postimg.cc/0Q8qFp17/studio-logo.png" alt="Studio branding" loading="lazy">
-        <span class="tag">Branding</span>
-      </div>
-      <div class="work-card">
-        <img src="https://i.postimg.cc/QNYrY943/Untitled-1.png" alt="Project" loading="lazy">
-        <span class="tag">Gaming Design</span>
-      </div>
+    <div class="works-carousel-stage">
+      <div class="works-carousel-3d" id="works-carousel-3d"></div>
     </div>
+  </div>
+</section>
+
+<section id="clients" class="tight">
+  <div class="container">
+    <h2 class="clients-heading">أبرز عملائنا</h2>
+  </div>
+  <div class="clients-marquee-wrap">
+    <div class="clients-marquee-track" id="clients-marquee-track"></div>
   </div>
 </section>
 
@@ -796,14 +871,28 @@ const SITE_LOGO = "https://i.postimg.cc/B64GkR16/verqo-logo.png";
 const DISCORD_ORDER_LINK = "https://discord.gg/yQXH9xXHfE";
 
 const WORK_IMAGES = [
-  "https://i.postimg.cc/FFT9tnKW/banner.png",
-  "https://i.postimg.cc/MTd8SvzT/1.png",
-  "https://i.postimg.cc/T11vYfPz/18.png",
-  "https://i.postimg.cc/Bv50mmk3/banner12.png",
-  "https://i.postimg.cc/G3g1g87p/banner23.png",
-  "https://i.postimg.cc/bvfP0769/Chat-GPT-Image-Sep-4-2026-at-12-17-01-PM.png",
-  "https://i.postimg.cc/0Q8qFp17/studio-logo.png",
-  "https://i.postimg.cc/QNYrY943/Untitled-1.png"
+  "https://i.postimg.cc/RVjH7D9M/Untitled-1.png",
+  "https://i.postimg.cc/xjGfxpKT/865422230155999-68716bdf62c89.png",
+  "https://i.postimg.cc/c4ssV7md/banner.png",
+  "https://i.postimg.cc/TYRRZj95/banner-copy.webp",
+  "https://i.postimg.cc/Qxx36881/Cards.png",
+  "https://i.postimg.cc/tCXXLd5V/Chat-GPT-Image-Sep-4-2026-at-12-17-01-PM.png",
+  "https://i.postimg.cc/fWvsjtN4/Free-Billboard-Mockup-1.png",
+  "https://i.postimg.cc/sXdzK5xM/Logo-core.png",
+  "https://i.postimg.cc/Y9K78Q0t/Untitled-1-2.png"
+];
+
+const CLIENT_LOGOS = [
+  "https://i.postimg.cc/K8TxT9cs/1-2-png.webp",
+  "https://i.postimg.cc/L8P2Py6d/2-1-png.webp",
+  "https://i.postimg.cc/JzXMXT7f/26-png.webp",
+  "https://i.postimg.cc/8zvNvyPg/30-png.webp",
+  "https://i.postimg.cc/x1mnmsTS/31-png.webp",
+  "https://i.postimg.cc/fRdDdHWp/6-png.webp",
+  "https://i.postimg.cc/y8RsRfYK/Asset-82x-png.webp",
+  "https://i.postimg.cc/GmDdDMhc/Asset-94x-png.webp",
+  "https://i.postimg.cc/W4PjwMtB/logo-white-png.webp",
+  "https://i.postimg.cc/FKQmVj75/Tybography-1-png.webp"
 ];
 
 const NAV_LINKS = [
@@ -934,6 +1023,31 @@ function renderMarquee(){
   });
 }
 
+function renderWorksCarousel(){
+  const mount = document.getElementById("works-carousel-3d");
+  if(!mount) return;
+
+  const step = 360 / WORK_IMAGES.length;
+
+  mount.innerHTML = WORK_IMAGES.map((src, i) => `
+    <div class="carousel-slide" style="--angle:${(i * step).toFixed(2)}deg">
+      <img src="${src}" alt="Work sample ${i + 1}" loading="lazy">
+    </div>
+  `).join("");
+}
+
+function renderClients(){
+  const track = document.getElementById("clients-marquee-track");
+  if(!track) return;
+
+  // duplicate the set once so translateX(-50%) loops seamlessly, no gaps
+  const set = CLIENT_LOGOS.map((src, i) => `<img src="${src}" alt="Client logo" loading="lazy">`).join("");
+  track.innerHTML = set + set;
+
+  const duration = Math.max(20, CLIENT_LOGOS.length * 3.5);
+  track.style.animationDuration = duration + "s";
+}
+
 function renderServices(){
   const grid = document.getElementById("services-grid");
   if(!grid) return;
@@ -1042,6 +1156,8 @@ document.addEventListener("DOMContentLoaded", () => {
   renderHeader();
   renderFooter();
   renderMarquee();
+  renderWorksCarousel();
+  renderClients();
   renderServices();
   setupServiceDropdownControls();
   setupScrollSpy();
