@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>VERQO — Branding, Art Direction & Gaming Design</title>
 
 <meta property="og:type" content="website">
@@ -53,13 +53,15 @@
 }
 
 *{ box-sizing: border-box; }
-html{ scroll-behavior: smooth; }
+html{ scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body{
   margin: 0;
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  width: 100%;
 }
 img{ max-width: 100%; display:block; }
 a{ color: inherit; text-decoration: none; }
@@ -77,7 +79,7 @@ a{ color: inherit; text-decoration: none; }
 --------------------------------- */
 .site-header{
   position: fixed;
-  top: 22px;
+  top: calc(22px + env(safe-area-inset-top, 0px));
   left: 0;
   right: 0;
   z-index: 100;
@@ -155,9 +157,14 @@ a{ color: inherit; text-decoration: none; }
 }
 
 @media (max-width: 720px){
-  .site-header{ top: 16px; padding: 0 5vw; }
-  .logo img{ height: 26px; }
-  .glass-nav a{ padding: 9px 13px; font-size: 12.5px; }
+  .site-header{ top: calc(14px + env(safe-area-inset-top, 0px)); padding: 0 4vw; }
+  .logo img{ height: 24px; }
+  .glass-nav{ padding: 6px; gap: 2px; }
+  .glass-nav a{ padding: 8px 11px; font-size: 11.5px; }
+}
+
+@media (max-width: 380px){
+  .glass-nav a{ padding: 7px 8px; font-size: 10.5px; }
 }
 
 /* ---------------------------------
@@ -172,7 +179,8 @@ a{ color: inherit; text-decoration: none; }
 .hero-viewport{
   position: relative;
   height: 100vh;
-  min-height: 640px;
+  height: 100svh;
+  min-height: 560px;
   width: 100%;
   overflow: hidden;
 }
@@ -232,7 +240,7 @@ a{ color: inherit; text-decoration: none; }
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 0 6vw 9vh;
+  padding: 0 6vw calc(9vh + env(safe-area-inset-bottom, 0px));
 }
 
 .hero-eyebrow{
@@ -247,8 +255,8 @@ a{ color: inherit; text-decoration: none; }
 .hero-title{
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(38px, 5.6vw, 80px);
-  line-height: 1.05;
+  font-size: clamp(34px, 5.6vw, 80px);
+  line-height: 1.08;
   margin: 0 0 22px;
   max-width: 18ch;
   color: var(--ink);
@@ -355,7 +363,7 @@ a{ color: inherit; text-decoration: none; }
 .scroll-hint{
   position: absolute;
   right: 6vw;
-  bottom: 4vh;
+  bottom: calc(4vh + env(safe-area-inset-bottom, 0px));
   z-index: 3;
   font-size: 12px;
   color: var(--ink-dim);
@@ -364,8 +372,15 @@ a{ color: inherit; text-decoration: none; }
 
 @media (max-width: 720px){
   .marquee-row img{ width: 220px; height: 150px; border-radius: 14px; }
-  .hero-content{ padding: 0 6vw 12vh; }
+  .hero-content{ padding: 0 5vw calc(11vh + env(safe-area-inset-bottom, 0px)); }
+  .hero-cta{ gap: 20px; }
   .scroll-hint{ display:none; }
+}
+
+@media (max-width: 380px){
+  .hero-title{ font-size: 30px; }
+  .hero-tagline{ font-size: 14px; margin-bottom: 28px; }
+  .cta-sweep{ padding: 13px 22px; font-size: 13px; }
 }
 
 /* ---------------------------------
@@ -436,8 +451,8 @@ section.tight{ padding: 60px 0; }
 /* contact */
 .contact-grid{
   display: grid;
-  grid-template-columns: 1.1fr .9fr;
-  gap: 60px;
+  grid-template-columns: 1fr;
+  max-width: 640px;
 }
 .contact-info h3{
   font-family: var(--font-display);
@@ -460,6 +475,7 @@ section.tight{ padding: 60px 0; }
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   padding: 16px 4px;
   color: var(--ink);
   transition: color .2s ease, padding-left .25s ease;
@@ -468,44 +484,19 @@ section.tight{ padding: 60px 0; }
   color: var(--chrome-1);
   padding-left: 8px;
 }
-.contact-list span{ color: var(--ink-dim); transition: color .2s ease; }
+.contact-list span{ color: var(--ink-dim); transition: color .2s ease; text-align: right; word-break: break-word; }
 .contact-list a:hover span{ color: var(--ink-dim); }
 
-.field{
-  margin-bottom: 18px;
-}
-.field label{
-  display:block;
-  font-size: 12.5px;
-  color: var(--ink-dim);
-  margin-bottom: 8px;
-}
-.field input,
-.field textarea{
-  width: 100%;
-  background: var(--bg-soft);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  padding: 13px 15px;
-  color: var(--ink);
-  font-family: var(--font-body);
-  font-size: 14px;
-  resize: vertical;
-}
-.field input:focus,
-.field textarea:focus{
-  outline: 2px solid var(--ink);
-  outline-offset: 1px;
-}
-
-@media (max-width: 800px){
-  .contact-grid{ grid-template-columns: 1fr; }
+@media (max-width: 480px){
+  .contact-list a{ flex-direction: column; align-items: flex-start; gap: 4px; }
+  .contact-list span{ text-align: left; font-size: 13px; }
 }
 
 /* footer */
 footer{
   border-top: 1px solid var(--line);
   padding: 40px 0;
+  padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
 }
 .footer-row{
   display:flex;
@@ -518,6 +509,7 @@ footer{
 .footer-links{
   display:flex;
   gap: 26px;
+  flex-wrap: wrap;
 }
 .footer-links a{
   font-size: 13px;
@@ -527,6 +519,11 @@ footer{
 .footer-note{
   font-size: 12.5px;
   color: var(--ink-dim);
+}
+
+@media (max-width: 480px){
+  .footer-row{ justify-content: center; text-align: center; }
+  .footer-links{ justify-content: center; gap: 16px 22px; }
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -550,8 +547,8 @@ section[id]{
 .intro h2{
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(30px, 4.2vw, 46px);
-  line-height: 1.05;
+  font-size: clamp(28px, 4.2vw, 46px);
+  line-height: 1.08;
   margin: 0 0 16px;
 }
 .intro p{
@@ -559,6 +556,13 @@ section[id]{
   color: var(--ink-dim);
   line-height: 1.6;
   margin: 0;
+}
+
+@media (max-width: 480px){
+  section{ padding: 64px 0; }
+  section.tight{ padding: 44px 0; }
+  .container{ padding: 0 5.5vw; }
+  .intro{ margin-bottom: 34px; }
 }
 
 /* ---------------------------------
@@ -636,7 +640,10 @@ section[id]{
   .services-grid{ grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 560px){
-  .services-grid{ grid-template-columns: 1fr; }
+  .services-grid{ grid-template-columns: 1fr; gap: 16px; }
+  .service-card{ aspect-ratio: 16 / 10; }
+  .service-card .service-label{ font-size: 16px; left: 16px; bottom: 16px; }
+  .service-card .service-hint{ right: 16px; bottom: 17px; font-size: 11px; padding: 5px 12px; }
 }
 
 /* Expanded Dropdown Drawer */
@@ -676,7 +683,7 @@ section[id]{
 }
 .drawer-header h3 {
   font-family: var(--font-display);
-  font-size: clamp(22px, 3vw, 28px);
+  font-size: clamp(20px, 3vw, 28px);
   margin: 0;
   color: var(--ink);
 }
@@ -746,6 +753,13 @@ section[id]{
   box-shadow: 0 6px 20px rgba(255,255,255,.25);
 }
 
+@media (max-width: 560px){
+  .service-dropdown-drawer.open{ padding: 26px 18px; margin-top: 16px; }
+  .drawer-header{ margin-bottom: 22px; padding-bottom: 16px; }
+  .drawer-close{ padding: 7px 14px; font-size: 12px; }
+  .drawer-items-grid{ grid-template-columns: 1fr; gap: 18px; }
+}
+
 /* ---------------------------------
    Works — auto-rotating 3D carousel
 --------------------------------- */
@@ -785,6 +799,11 @@ section[id]{
   width: 100%;
   height: 100%;
   object-fit: cover;
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  pointer-events: auto;
 }
 @keyframes spinCarousel{
   from{ transform: rotateY(0deg); }
@@ -798,8 +817,12 @@ section[id]{
   .works-carousel-3d{ --radius: 540px; --slide-w: 340px; --slide-h: 191px; }
 }
 @media (max-width: 560px){
-  .works-carousel-stage{ height: 260px; }
-  .works-carousel-3d{ --radius: 350px; --slide-w: 220px; --slide-h: 124px; }
+  .works-carousel-stage{ height: 240px; }
+  .works-carousel-3d{ --radius: 320px; --slide-w: 200px; --slide-h: 112px; }
+}
+@media (max-width: 380px){
+  .works-carousel-stage{ height: 200px; }
+  .works-carousel-3d{ --radius: 260px; --slide-w: 160px; --slide-h: 90px; }
 }
 
 /* ---------------------------------
@@ -810,7 +833,7 @@ section[id]{
   direction: ltr;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(26px, 3.6vw, 38px);
+  font-size: clamp(24px, 3.6vw, 38px);
   margin: 0 0 46px;
   color: var(--ink);
 }
@@ -841,8 +864,10 @@ section[id]{
   .clients-marquee-track{ animation: none; }
 }
 @media (max-width: 720px){
-  .clients-marquee-track{ gap: 42px; }
-  .clients-marquee-track img{ height: calc(29px * var(--logo-scale, 1)); }
+  .hero-clients{ padding: 40px 0 56px; }
+  .clients-heading{ margin-bottom: 32px; }
+  .clients-marquee-track{ gap: 36px; }
+  .clients-marquee-track img{ height: calc(26px * var(--logo-scale, 1)); }
 }
 </style>
 </head>
@@ -918,12 +943,10 @@ section[id]{
     <div class="intro">
       <div class="eyebrow">CONTACT</div>
       <h2>Let's build something that stands out.</h2>
-      <p>Tell us a bit about your project and we'll get back to you within a day.</p>
+      <p>Reach out through any of the channels below and we'll get back to you within a day.</p>
     </div>
     <div class="contact-grid">
       <div class="contact-info">
-        <h3>Get in touch</h3>
-        <p>Whether it's a full brand identity or a single campaign asset, send us the brief and we'll take it from there.</p>
         <ul class="contact-list">
           <li><a href="https://discord.gg/yQXH9xXHfE" target="_blank" rel="noopener noreferrer">Discord Contact <span>discord.gg/yQXH9xXHfE</span></a></li>
           <li><a href="https://linktr.ee/i7amada" target="_blank" rel="noopener noreferrer">Linktree <span>linktr.ee/i7amada</span></a></li>
@@ -933,26 +956,6 @@ section[id]{
           <li><a href="https://wa.me/201036113970" target="_blank" rel="noopener noreferrer">WhatsApp <span>+20 103 611 3970</span></a></li>
         </ul>
       </div>
-
-      <form class="contact-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Sent';">
-        <div class="field">
-          <label for="name">Name</label>
-          <input id="name" type="text" placeholder="Your name" required>
-        </div>
-        <div class="field">
-          <label for="email">Email</label>
-          <input id="email" type="email" placeholder="you@example.com" required>
-        </div>
-        <div class="field">
-          <label for="project">Project type</label>
-          <input id="project" type="text" placeholder="Branding, campaign, gaming design…">
-        </div>
-        <div class="field">
-          <label for="message">Message</label>
-          <textarea id="message" rows="5" placeholder="Tell us about your project" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Send message</button>
-      </form>
     </div>
   </div>
 </section>
@@ -1124,7 +1127,7 @@ function renderWorksCarousel(){
 
   mount.innerHTML = WORK_IMAGES.map((src, i) => `
     <div class="carousel-slide" style="--angle:${(i * step).toFixed(2)}deg">
-      <img src="${src}" alt="Work sample ${i + 1}" loading="lazy">
+      <img src="${src}" alt="Work sample ${i + 1}" loading="lazy" draggable="false" oncontextmenu="return false" ondragstart="return false">
     </div>
   `).join("");
 }
