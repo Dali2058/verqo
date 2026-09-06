@@ -848,7 +848,7 @@ section[id]{
   align-items: center;
   gap: 70px;
   width: max-content;
-  animation: scrollLeft linear infinite;
+  will-change: transform;
   opacity: 0;
   transition: opacity .5s ease;
 }
@@ -859,9 +859,6 @@ section[id]{
   filter: brightness(0) invert(1);
   opacity: .9;
   flex: 0 0 auto;
-}
-@media (prefers-reduced-motion: reduce){
-  .clients-marquee-track{ animation: none; }
 }
 @media (max-width: 720px){
   .hero-clients{ padding: 40px 0 56px; }
@@ -1150,7 +1147,7 @@ function measureLogoScale(src){
     const probe = new Image();
     probe.crossOrigin = "anonymous";
 
-    const finishWithFallback = () => resolve(LOGO_FALLBACK_SCALE[src] || 1);
+    const finishWithFallback = () => resolve({ scale: LOGO_FALLBACK_SCALE[src] || 1, img: probe });
 
     probe.onload = () => {
       try{
@@ -1185,7 +1182,7 @@ function measureLogoScale(src){
         const contentRatio = (bottom - top + 1) / h;
         if(contentRatio <= 0.02){ finishWithFallback(); return; }
 
-        resolve(Math.max(1, Math.min(1 / contentRatio, 2.3)));
+        resolve({ scale: Math.max(1, Math.min(1 / contentRatio, 2.3)), img: probe });
       }catch(err){
         // canvas got tainted by a cross-origin image with no CORS headers
         finishWithFallback();
@@ -1197,6 +1194,57 @@ function measureLogoScale(src){
   });
 }
 
+// Drives the clients marquee by hand (translateX in a rAF loop) instead of a
+// CSS keyframe animation. This fixes two things at once:
+//  - Hovering can ease the speed down smoothly instead of jump-cutting,
+//    because we control the per-frame delta directly.
+//  - The old approach relied on translateX(-50%), which only loops cleanly
+//    if the two duplicated halves are pixel-identical. Any sub-pixel gap
+//    rounding difference between the halves made the loop point visibly
+//    "blink" as it snapped back. Measuring the real half-width in JS after
+//    the images are in the DOM avoids that seam entirely.
+function setupMarqueeMotion(track, { pxPerSecond = 34, hoverFactor = 0.28 } = {}){
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let halfWidth = 0;
+  const measure = () => { halfWidth = track.scrollWidth / 2; };
+  measure();
+  window.addEventListener("resize", measure);
+
+  if(prefersReduced){
+    track.style.transform = "translateX(0px)";
+    return;
+  }
+
+  let pos = 0;
+  let currentSpeed = pxPerSecond;
+  let targetSpeed = pxPerSecond;
+  let lastTime = null;
+
+  const wrap = track.parentElement;
+  wrap.addEventListener("mouseenter", () => { targetSpeed = pxPerSecond * hoverFactor; });
+  wrap.addEventListener("mouseleave", () => { targetSpeed = pxPerSecond; });
+  wrap.addEventListener("touchstart", () => { targetSpeed = pxPerSecond * hoverFactor; }, { passive: true });
+  wrap.addEventListener("touchend", () => { targetSpeed = pxPerSecond; }, { passive: true });
+
+  function frame(time){
+    if(lastTime === null) lastTime = time;
+    const dt = Math.min(0.05, (time - lastTime) / 1000); // clamp huge tab-switch gaps
+    lastTime = time;
+
+    // ease current speed toward target speed for a smooth slow-down/speed-up
+    currentSpeed += (targetSpeed - currentSpeed) * Math.min(1, dt * 2.2);
+
+    pos -= currentSpeed * dt;
+    if(halfWidth > 0 && pos <= -halfWidth){ pos += halfWidth; }
+
+    track.style.transform = `translateX(${pos.toFixed(2)}px)`;
+    requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+}
+
 async function renderClients(){
   const track = document.getElementById("clients-marquee-track");
   if(!track) return;
@@ -1204,26 +1252,33 @@ async function renderClients(){
   // Measure every logo BEFORE touching the DOM. Sizing images after they're
   // already mounted and animating causes the track's width to keep changing
   // mid-scroll, which is what made logos visibly jump/blink in and out.
-  const scales = await Promise.all(CLIENT_LOGOS.map(measureLogoScale));
+  const results = await Promise.all(CLIENT_LOGOS.map(measureLogoScale));
 
-  const buildSet = () => CLIENT_LOGOS.map((src, i) => {
-    const img = document.createElement("img");
+  const buildSet = () => results.map(({ scale, img: loadedImg }) => {
+    // Clone the already-decoded probe image instead of creating a fresh
+    // <img> and reassigning src. A clone paints instantly with no re-fetch
+    // or re-decode step, which is what caused logos to flash/disappear
+    // right as they scrolled into view.
+    const img = loadedImg.cloneNode();
     img.alt = "Client logo";
     img.loading = "eager";
     img.decoding = "async";
-    img.style.setProperty("--logo-scale", scales[i].toFixed(3));
-    img.src = src;
+    img.removeAttribute("crossorigin");
+    img.style.setProperty("--logo-scale", scale.toFixed(3));
     return img;
   });
 
   track.innerHTML = "";
-  // duplicate the full set once so translateX(-50%) loops seamlessly, no gaps
+  // duplicate the full set once so the loop has a matching second half
   buildSet().forEach(img => track.appendChild(img));
   buildSet().forEach(img => track.appendChild(img));
 
-  const duration = Math.max(20, CLIENT_LOGOS.length * 3.5);
-  track.style.animationDuration = duration + "s";
   requestAnimationFrame(() => { track.style.opacity = "1"; });
+
+  // Wait a frame for layout, then start the hand-driven scroll.
+  requestAnimationFrame(() => {
+    setupMarqueeMotion(track, { pxPerSecond: 34, hoverFactor: 0.28 });
+  });
 }
 
 function renderServices(){
