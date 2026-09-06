@@ -66,6 +66,41 @@ body{
 img{ max-width: 100%; display:block; }
 a{ color: inherit; text-decoration: none; }
 
+/* ---------------------------------
+   Progressive image loading (blur-up)
+   Images render immediately at a soft, blurred low-fidelity look, then
+   sharpen in once fully downloaded — so the page feels populated in
+   seconds instead of showing blank space while heavy files transfer.
+--------------------------------- */
+.img-progressive{
+  filter: blur(16px) saturate(1.05);
+  transform: scale(1.04);
+  opacity: .55;
+  transition: filter .55s ease, transform .55s ease, opacity .4s ease;
+}
+.img-progressive.is-loaded{
+  filter: blur(0) saturate(1);
+  transform: scale(1);
+  opacity: 1;
+}
+@keyframes imgSkeletonShimmer{
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.img-skeleton{
+  background: linear-gradient(110deg, #121215 8%, #1c1c21 22%, #121215 36%);
+  background-size: 250% 100%;
+  animation: imgSkeletonShimmer 1.8s ease-in-out infinite;
+}
+.img-skeleton.is-loaded{
+  animation: none;
+  background: none;
+}
+@media (prefers-reduced-motion: reduce){
+  .img-progressive{ transition: opacity .3s ease; filter: none; transform: none; }
+  .img-skeleton{ animation: none; }
+}
+
 ::selection{ background: var(--chrome-1); color:#000; }
 
 .container{
@@ -962,6 +997,48 @@ section[id]{
 const SITE_LOGO = "https://i.postimg.cc/B64GkR16/verqo-logo.png";
 const DISCORD_ORDER_LINK = "https://discord.gg/yQXH9xXHfE";
 
+// The site's images live on postimg.cc, which serves the original uploaded
+// files at full resolution — often far larger than what's ever shown on
+// screen. We can't re-export those files ourselves (they're not ours to
+// edit), so instead every image is routed through images.weserv.nl, a
+// free resizing proxy: it fetches the original once, resizes it down to
+// the pixel width actually needed here (roughly 40% of a typical full-size
+// upload), re-encodes it as WebP, and serves that much smaller file. This
+// cuts real transferred bytes, not just perceived load time.
+function resizeImg(url, width, quality = 75){
+  return `https://images.weserv.nl/?url=${encodeURIComponent(url)}&w=${width}&q=${quality}&output=webp&il`;
+}
+
+const IMG_WIDTH = {
+  logo: 220,          // header/footer wordmark
+  marquee: 760,        // hero background marquee tiles (~380px box, retina)
+  carousel: 960,        // works 3D carousel slides (~480px box, retina)
+  serviceCover: 760,     // service category cover images
+  drawerItem: 640,        // price-list item images inside the drawer
+  clientLogo: 400          // client logo strip
+};
+
+// Marks an <img> (and optionally its skeleton-bearing wrapper) as loaded so
+// the blur-up placeholder can sharpen/fade into the real picture. Safe to
+// call on images that are already cached/complete.
+function applyProgressiveLoad(img, wrapper){
+  img.classList.add("img-progressive");
+  if(wrapper) wrapper.classList.add("img-skeleton");
+
+  const markLoaded = () => {
+    img.classList.add("is-loaded");
+    if(wrapper) wrapper.classList.add("is-loaded");
+  };
+
+  if(img.complete && img.naturalWidth){
+    markLoaded();
+  } else {
+    img.addEventListener("load", markLoaded, { once: true });
+    // Don't leave a permanent shimmer if the image 404s — just reveal it as-is.
+    img.addEventListener("error", markLoaded, { once: true });
+  }
+}
+
 const WORK_IMAGES = [
   "https://i.postimg.cc/RVjH7D9M/Untitled-1.png",
   "https://i.postimg.cc/xjGfxpKT/865422230155999-68716bdf62c89.png",
@@ -1064,7 +1141,7 @@ function renderHeader(){
   ).join("");
 
   mount.innerHTML = `
-    <a href="#home" class="logo"><img src="${SITE_LOGO}" alt="VERQO"></a>
+    <a href="#home" class="logo"><img src="${resizeImg(SITE_LOGO, IMG_WIDTH.logo)}" alt="VERQO"></a>
     <nav class="glass-nav">${links}</nav>
   `;
 }
@@ -1074,7 +1151,7 @@ function renderFooter(){
   if(!mount) return;
   mount.innerHTML = `
     <div class="container footer-row">
-      <a href="#home" class="logo"><img src="${SITE_LOGO}" alt="VERQO"></a>
+      <a href="#home" class="logo"><img src="${resizeImg(SITE_LOGO, IMG_WIDTH.logo)}" alt="VERQO"></a>
       <div class="footer-links">
         <a href="#home">Home</a>
         <a href="#services">Services</a>
@@ -1105,12 +1182,13 @@ function renderMarquee(){
     for(let copy = 0; copy < 2; copy++){
       row.images.forEach((idx, i) => {
         const img = document.createElement("img");
-        img.src = WORK_IMAGES[idx];
+        img.src = resizeImg(WORK_IMAGES[idx], IMG_WIDTH.marquee);
         img.alt = "";
         img.decoding = "async";
         const isFirstVisible = copy === 0 && i < 3;
         img.loading = isFirstVisible ? "eager" : "lazy";
         if(isFirstVisible) img.fetchPriority = "high";
+        applyProgressiveLoad(img);
         rowEl.appendChild(img);
       });
     }
@@ -1126,9 +1204,14 @@ function renderWorksCarousel(){
 
   mount.innerHTML = WORK_IMAGES.map((src, i) => `
     <div class="carousel-slide" style="--angle:${(i * step).toFixed(2)}deg">
-      <img src="${src}" alt="Work sample ${i + 1}" loading="lazy" decoding="async" fetchpriority="low" draggable="false" oncontextmenu="return false" ondragstart="return false">
+      <img src="${resizeImg(src, IMG_WIDTH.carousel)}" alt="Work sample ${i + 1}" loading="lazy" decoding="async" fetchpriority="low" draggable="false" oncontextmenu="return false" ondragstart="return false">
     </div>
   `).join("");
+
+  mount.querySelectorAll(".carousel-slide").forEach(slide => {
+    const img = slide.querySelector("img");
+    if(img) applyProgressiveLoad(img, slide);
+  });
 }
 
 // Manual fallback scale for logos that sit on a mostly-empty canvas —
@@ -1141,12 +1224,13 @@ const LOGO_FALLBACK_SCALE = {
   "https://i.postimg.cc/W4PjwMtB/logo-white-png.webp": 1.8
 };
 
-function measureLogoScale(src){
+function measureLogoScale(originalSrc){
+  const src = resizeImg(originalSrc, IMG_WIDTH.clientLogo);
   return new Promise((resolve) => {
     const probe = new Image();
     probe.crossOrigin = "anonymous";
 
-    const finishWithFallback = () => resolve({ scale: LOGO_FALLBACK_SCALE[src] || 1, img: probe });
+    const finishWithFallback = () => resolve({ scale: LOGO_FALLBACK_SCALE[originalSrc] || 1, img: probe });
 
     probe.onload = () => {
       try{
@@ -1286,12 +1370,17 @@ function renderServices(){
 
   grid.innerHTML = SERVICE_CATEGORIES.map((cat, i) => `
     <div class="service-card" data-index="${i}" role="button" tabindex="0">
-      <img src="${cat.cover}" alt="${cat.name} service" loading="lazy" decoding="async">
+      <img src="${resizeImg(cat.cover, IMG_WIDTH.serviceCover)}" alt="${cat.name} service" loading="lazy" decoding="async">
       <div class="service-overlay"></div>
       <span class="service-label">${cat.name}</span>
       <span class="service-hint">View Prices</span>
     </div>
   `).join("");
+
+  grid.querySelectorAll(".service-card").forEach(card => {
+    const img = card.querySelector("img");
+    if(img) applyProgressiveLoad(img, card);
+  });
 
   grid.querySelectorAll(".service-card").forEach(card => {
     const toggle = () => toggleServiceDropdown(Number(card.dataset.index));
@@ -1331,10 +1420,15 @@ function toggleServiceDropdown(index){
   titleEl.textContent = `${cat.name} — Price List`;
   itemsGrid.innerHTML = cat.images.map(src => `
     <div class="drawer-item">
-      <img src="${src}" alt="${cat.name} pricing item" loading="lazy" decoding="async">
+      <img src="${resizeImg(src, IMG_WIDTH.drawerItem)}" alt="${cat.name} pricing item" loading="lazy" decoding="async">
       <a href="${DISCORD_ORDER_LINK}" target="_blank" rel="noopener" class="order-btn">Order</a>
     </div>
   `).join("");
+
+  itemsGrid.querySelectorAll(".drawer-item").forEach(item => {
+    const img = item.querySelector("img");
+    if(img) applyProgressiveLoad(img);
+  });
 
   drawer.classList.add("open");
 
