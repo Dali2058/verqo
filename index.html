@@ -18,9 +18,9 @@
 <meta name="twitter:title" content="VERQO — We Build Brands That Stand Out">
 <meta name="twitter:description" content="Branding, art direction and gaming design for brands and communities that want to lead the scene.">
 <meta name="twitter:image" content="https://i.postimg.cc/25Bp1rnj/image.png">
-<link rel="icon" type="image/png" href="https://i.postimg.cc/rF9G6PYk/verqo-favicon.png">
-<link rel="shortcut icon" type="image/png" href="https://i.postimg.cc/rF9G6PYk/verqo-favicon.png">
-<link rel="apple-touch-icon" href="https://i.postimg.cc/rF9G6PYk/verqo-favicon.png">
+<link rel="icon" type="image/png" href="https://i.postimg.cc/R0xmyzGt/Artboard-1.png">
+<link rel="shortcut icon" type="image/png" href="https://i.postimg.cc/R0xmyzGt/Artboard-1.png">
+<link rel="apple-touch-icon" href="https://i.postimg.cc/R0xmyzGt/Artboard-1.png">
 <style>
 /* ============================================
    VERQO — shared stylesheet
@@ -1111,7 +1111,10 @@ function renderMarquee(){
         const img = document.createElement("img");
         img.src = WORK_IMAGES[idx];
         img.alt = "";
-        img.loading = (copy === 0 && i < 3) ? "eager" : "lazy";
+        img.decoding = "async";
+        const isFirstVisible = copy === 0 && i < 3;
+        img.loading = isFirstVisible ? "eager" : "lazy";
+        if(isFirstVisible) img.fetchPriority = "high";
         rowEl.appendChild(img);
       });
     }
@@ -1127,7 +1130,7 @@ function renderWorksCarousel(){
 
   mount.innerHTML = WORK_IMAGES.map((src, i) => `
     <div class="carousel-slide" style="--angle:${(i * step).toFixed(2)}deg">
-      <img src="${src}" alt="Work sample ${i + 1}" loading="lazy" draggable="false" oncontextmenu="return false" ondragstart="return false">
+      <img src="${src}" alt="Work sample ${i + 1}" loading="lazy" decoding="async" fetchpriority="low" draggable="false" oncontextmenu="return false" ondragstart="return false">
     </div>
   `).join("");
 }
@@ -1229,7 +1232,7 @@ function renderServices(){
 
   grid.innerHTML = SERVICE_CATEGORIES.map((cat, i) => `
     <div class="service-card" data-index="${i}" role="button" tabindex="0">
-      <img src="${cat.cover}" alt="${cat.name} service" loading="lazy">
+      <img src="${cat.cover}" alt="${cat.name} service" loading="lazy" decoding="async">
       <div class="service-overlay"></div>
       <span class="service-label">${cat.name}</span>
       <span class="service-hint">View Prices</span>
@@ -1274,7 +1277,7 @@ function toggleServiceDropdown(index){
   titleEl.textContent = `${cat.name} — Price List`;
   itemsGrid.innerHTML = cat.images.map(src => `
     <div class="drawer-item">
-      <img src="${src}" alt="${cat.name} pricing item" loading="lazy">
+      <img src="${src}" alt="${cat.name} pricing item" loading="lazy" decoding="async">
       <a href="${DISCORD_ORDER_LINK}" target="_blank" rel="noopener" class="order-btn">Order</a>
     </div>
   `).join("");
